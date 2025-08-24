@@ -1,40 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+**Supabase Events Platform**
 
-## Getting Started
+A simple event management platform built with Next.js and Supabase. Users can view upcoming events and RSVP with Yes, No, or Maybe.
 
-First, run the development server:
+**Short Description of Database Design**
 
-```bash
+The database is designed to manage users, events, and RSVPs efficiently.
+
+Users table stores registered users with unique emails.
+
+Events table stores event details and links to the creator via a foreign key.
+
+RSVPs table tracks each user’s response to events, ensuring a user can RSVP only once per event.
+
+Referential integrity is maintained using ON DELETE CASCADE, and data validity is enforced using constraints like CHECK and UNIQUE.
+
+**Database Design**
+
+*Tables:*
+
+Users
+
+id (UUID, PK)
+
+name (Text, Not Null)
+
+email (Text, Unique, Not Null)
+
+created_at (Timestamp, default now)
+
+Events
+
+id (UUID, PK)
+
+title (Text, Not Null)
+
+description (Text)
+
+date (Date, Not Null)
+
+city (Text)
+
+created_by (UUID, FK → Users, on delete cascade)
+
+RSVPs
+
+id (UUID, PK)
+
+user_id (UUID, FK → Users, on delete cascade)
+
+event_id (UUID, FK → Events, on delete cascade)
+
+status (Text, Yes/No/Maybe)
+
+Unique combination of user_id and event_id
+
+**Design Choices:**
+
+Used UUID for unique identifiers across tables.
+
+on delete cascade ensures database integrity.
+
+CHECK constraint on RSVP status prevents invalid values.
+
+unique(user_id, event_id) prevents duplicate RSVPs.
+
+**Features**
+
+View Events: List all upcoming events with title, description, date, and city.
+
+RSVP: Users can RSVP to events with one of three statuses: Yes, No, Maybe.
+
+Database: Managed with Supabase using three tables: users, events, rsvps.
+
+Referential Integrity: Deleting a user or event automatically removes associated RSVPs.
+
+***Setup Instructions***
+
+**Clone the repo:**
+
+git clone <your-github-repo-url>
+cd supabase-events
+
+
+**Install dependencies:**
+
+npm install
+
+
+**Set up environment variables (.env.local):**
+
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+
+
+**Run locally:**
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Live Deployment**
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+Access the live app on Vercel:
+🔗 https://pixabeam-events-2p0mpubqr-vaishnavibolgam25-7586s-projects.vercel.app/
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+Screenshots / ER Diagram
+<img width="1500" height="764" alt="supabase-schema-ntbzsjgexdpcgmlrxsyt" src="https://github.com/user-attachments/assets/d5b50d2a-5d4c-4a9f-a3eb-970508b7cf55" />
+<img width="1901" height="902" alt="Screenshot 2025-08-24 132922" src="https://github.com/user-attachments/assets/40073e1e-1135-43df-be3e-13c7ff1500d8" />
+<img width="1919" height="914" alt="Screenshot 2025-08-24 132851" src="https://github.com/user-attachments/assets/837509b9-b105-43f7-9dbc-ef5e7309b51b" />
+<img width="1916" height="913" alt="Screenshot 2025-08-24 132831" src="https://github.com/user-attachments/assets/f5ff8c1e-55fe-4030-9adb-e27602057a0e" />
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Technologies Used
 
-## Learn More
+Next.js
+ – React framework
 
-To learn more about Next.js, take a look at the following resources:
+Supabase
+ – Backend & database
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+JavaScript / HTML / CSS
