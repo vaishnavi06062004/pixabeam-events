@@ -52,7 +52,7 @@ export default function RSVP() {
 
     try {
       // ✅ Check if user exists
-      let { data: user, error: userError } = await supabase
+      const { data: user, error: userError } = await supabase
         .from("users")
         .select("*")
         .eq("email", email)
@@ -88,10 +88,15 @@ export default function RSVP() {
       setName("");
       setEmail("");
       setStatus("Yes");
-    } catch (err: any) {
-      console.error(err);
-      setMessage("Something went wrong: " + err.message);
-    }
+    } catch (err: unknown) {
+  if (err instanceof Error) {
+    console.error(err)
+    setMessage("Something went wrong: " + err.message)
+  } else {
+    console.error(err)
+    setMessage("Something went wrong")
+  }
+}
   }
 
   if (!event) return <p>Loading...</p>;
